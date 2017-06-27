@@ -8,17 +8,19 @@ class Deck extends Component {
   constructor(props) {
     super(props);
 
+    const position = new Animated.ValueXY(); // no default position
+
     const panResponder = PanResponder.create({
       // called anytime user presses the screen
       onStartShouldSetPanResponder: () => true,
       // called anytime user drags across the screen
       onPanResponderMove: (event, gesture) => {
-        console.log(gesture);
+        position.setValue({ x: gesture.dx, y: gesture.dy }) // manually update position
       },
       onPanResponderRelease: () => {}
     });
 
-    this.state = { panResponder };
+    this.state = { panResponder, position };
   }
 
   renderCards() {
@@ -29,9 +31,12 @@ class Deck extends Component {
 
   render() {
     return (
-      <View {...this.state.panResponder.panHandlers}>
+      <Animated.View
+        style={this.state.position.getLayout()}
+        {...this.state.panResponder.panHandlers}
+      >
         {this.renderCards()}
-      </View>
+      </Animated.View>
     );
   }
 }
