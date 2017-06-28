@@ -7,6 +7,7 @@ import {
 
 const SCREEN_WIDTH = Dimensions.get('window').width;
 const SWIPE_THRESHOLD = 0.25 * SCREEN_WIDTH;
+const SWIPE_OUT_DURATION = 250;
 
 class Deck extends Component {
   constructor(props) {
@@ -23,9 +24,9 @@ class Deck extends Component {
       },
       onPanResponderRelease: (event, gesture) => {
         if (gesture.dx > SWIPE_THRESHOLD) {
-          console.log('swipe right!')
+          this.forceSwipeRight();
         } else if (gesture.dx < - SWIPE_THRESHOLD) {
-          console.log('swipe left!')
+
         } else {
           this.resetPosition();
         }
@@ -33,6 +34,13 @@ class Deck extends Component {
     });
 
     this.state = { panResponder, position };
+  }
+
+  forceSwipeRight() {
+    Animated.timing(this.state.position, {
+      toValue: { x: SCREEN_WIDTH, y: 0 },
+      duration: SWIPE_OUT_DURATION
+    }).start();
   }
 
   resetPosition(){
