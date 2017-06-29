@@ -79,8 +79,10 @@ class Deck extends Component {
   }
 
   renderCards() {
-    return this.props.data.map((item, index) => {
-      if (index === 0) {
+    return this.props.data.map((item, i) => {
+      if (i < this.state.index) { return null; } // if already swiped, do not build component
+
+      if (i === this.state.index ) {
         return (
           <Animated.View
             key={item.id}
