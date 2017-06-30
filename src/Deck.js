@@ -3,7 +3,10 @@ import {
   View,
   Animated,
   PanResponder,
-  Dimensions } from 'react-native';
+  Dimensions,
+  LayoutAnimation,
+  UIManager
+} from 'react-native';
 
 const SCREEN_WIDTH = Dimensions.get('window').width;
 const SWIPE_THRESHOLD = 0.25 * SCREEN_WIDTH;
@@ -39,6 +42,20 @@ class Deck extends Component {
     });
 
     this.state = { panResponder, position, index: 0 };
+  }
+
+  componentWillReceiveProps(nextProps) {
+    // if receiving a new set of items
+    if (nextProps.data !== this.props.data) {
+        // reset state
+        this.setState({ index: 0 })
+    }
+  }
+
+  componentWillUpdate() {
+    // Android: if this function exists, set it true
+    UIManager.setLayoutAnimationEnabledExperimental && UIManager.setLayoutAnimationEnabledExperimental(true);
+    LayoutAnimation.spring();
   }
 
   forceSwipe(direction) {
